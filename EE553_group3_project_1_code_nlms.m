@@ -36,7 +36,7 @@ x = 0.6 * sin(2*pi*300*t + pi/6) + ...
     0.5 * lowpass(randn(N, 1), 150, fs);
 
 %% ------------------------------------------------------------------------
-%  Least Mean Squares (LMS)
+%  Normalized LMS (NLMS)
 %  ------------------------------------------------------------------------
 filter_length = 64;  % Number of Filter weights (taps)
 mu = 0.1;            % Normalized step size (0 < mu < 1)
