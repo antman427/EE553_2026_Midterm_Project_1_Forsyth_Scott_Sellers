@@ -25,7 +25,7 @@ v_engine = 0.5 * sin(2*pi*300*t) + 0.25 * sin(2*pi*600*t);
 
 % Unpredictable Noise (Road): Used Band-Limited at 150Hz
 raw_road = randn(N, 1);
-v_road = 0.8 * lowpass(raw_road, 150, fs);
+v_road = 0.8 * lowpass(raw_road, 150, fs);  % Changed randn to raw_road for Comparsions
 
 % Input d(n): Corrupted accelerometer
 d = s + v_engine + v_road;
@@ -33,7 +33,7 @@ d = s + v_engine + v_road;
 % Reference Input x(n)
 x = 0.6 * sin(2*pi*300*t + pi/6) + ...
     0.3 * sin(2*pi*600*t + pi/8) + ...
-    0.5 * lowpass(randn(N, 1), 150, fs);
+    0.5 * lowpass(raw_road, 150, fs);
 
 %% ------------------------------------------------------------------------
 %  Normalized LMS (NLMS)
@@ -109,3 +109,29 @@ ylabel('Power/Frequency (dB/Hz)');
 legend('Noisy Input d(n)', 'Cleaned Output e(n)', 'Location', 'best');
 grid on;
 xlim([0 1000]);
+
+%% ------------------------------------------------------------------------
+%  SNR Calculations
+%  ------------------------------------------------------------------------
+% Calculate Power of the desired signal
+P_s = mean(s.^2);
+
+% 1) Initial SNR of Corrupted Signal
+noise_in = d - s;
+P_noise_in = mean(noise_in.^2);
+SNR_in = 10* log10(P_s / P_noise_in);
+
+% 2) Final SNR of Cleaned Signal
+noise_out = e(100:end) - s(100:end);
+P_noise_out = mean(noise_out.^2);
+P_s_converged = mean(s(100:end).^2);
+SNR_out = 10 * log10(P_s_converged / P_noise_out);
+
+SNR_improvement = SNR_out - SNR_in;
+
+% Display SNR results
+fprintf('\n--- Signal-to-Noise Ratio (SNR Results) ---\n');
+fprintf('Initial SNR of Corrupted Signal: %8.2f dB\n', SNR_in);
+fprintf('Final SNR of Cleaned Signal: %8.2f dB\n', SNR_out);
+fprintf('SNR Improvement: %8.2f dB', SNR_improvement);
+fprintf('\n-------------------------------------------\n');
