@@ -33,7 +33,7 @@ d = s + v_engine + v_road;
 % Reference Input x(n)
 x = 0.6 * sin(2*pi*300*t + pi/6) + ...
     0.3 * sin(2*pi*600*t + pi/8) + ...
-    0.5 * lowpass(randn(N, 1), 150, fs);
+    0.5 * lowpass(raw_road, 150, fs);
 
 %% ------------------------------------------------------------------------
 %  Normalized LMS (NLMS)
