@@ -39,9 +39,7 @@ x = 0.6 * sin(2 * pi * 300 * t + pi / 6) + ...
 %  Least Mean Squares (LMS)
 %  ------------------------------------------------------------------------
 filter_length_list = [16 32 64 128 256]; % Number of Filter weights (taps)
-mu_list = [0.01 0.025 0.05 0.075 0.1]; % Step size
-%filter_length_list = [64];
-%mu_list = [0.01];
+mu_list = [0.05 0.075 0.1 0.125 0.15]; % Step size
 mse_table = zeros(length(filter_length_list), length(mu_list));
 
 for fl_idx = 1 : numel(filter_length_list)
@@ -79,7 +77,6 @@ for fl_idx = 1 : numel(filter_length_list)
 
             % Track weight vector magnitude
             w_mags(i) = norm(w');
-            disp(i);
         end
 
         %% ------------------------------------------------------------------------
